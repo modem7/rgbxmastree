@@ -12,6 +12,13 @@ updates:
     assignees:
       - "modem7"
 
+  - package-ecosystem: "pip" # See documentation for possible values
+    directory: "/examples" # Location of package manifests
+    schedule:
+      interval: "daily"
+    assignees:
+      - "modem7"
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
