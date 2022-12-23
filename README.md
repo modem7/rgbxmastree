@@ -2,11 +2,17 @@
 
 Raspberry Pi RGB Xmas Tree
 
+## Automated install script
+```bash
+curl -s https://raw.githubusercontent.com/modem7/rgbxmastree/master/install.sh | sudo bash
+```
+
 ## Getting started
 
 Install required packages:
 
 ```bash
+sudo apt update && \
 sudo apt install -y python3-gpiozero python3-pigpio git
 ```
 
