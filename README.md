@@ -1,158 +1,71 @@
 # rgbxmastree
 
-Code examples for the RGB Xmas Tree
+Raspberry Pi RGB Xmas Tree
 
 ## Getting started
 
-Start by downloading the xmas tree file. Open a terminal and type:
+Install required packages:
 
 ```bash
-wget https://bit.ly/2Lr9CT3 -O tree.py
+sudo apt install -y python3-gpiozero python3-pigpio git
 ```
 
-Test the tree by running `python3 tree.py` (or running it from an IDE like Mu,
-Thonny or IDLE). All the lights should come on (white).
+## Clone the Repo
+```bash
+cd /home/pi
+git clone https://github.com/modem7/rgbxmastree.git
+```
 
-When you write your own Python code, make sure you keep this file in the same
-folder.
+Copy across any scripts (`.py`) from the `examples` directory you wish, into the `/home/pi/rgbxmastree` directory and make them executable.
 
-If you're using Raspbian Desktop, you don't need to install anything. If you're
-using Raspbian Lite, you'll need to install gpiozero with:
+E.g.
 
 ```bash
-sudo apt install python3-gpiozero
+cd /home/pi/rgbxmastree
+cp examples/randomsparkles.py ./
+sudo chmod +x *.py
 ```
 
-Open a Python shell or IDE, import `RGBXmasTree` and initialise your tree:
+## Create and enable the systemd service
 
-```python
-from tree import RGBXmasTree
+Edit as required.
 
-tree = RGBXmasTree()
+```bash
+sudo tee /etc/systemd/system/rgbxmastree.service << EOF
+# rgbxmastree.service
+[Unit]
+Description=PiHut RGB Christmas tree
+
+[Service]
+WorkingDirectory=/home/pi/rgbxmastree
+Type=simple
+User=pi
+
+ExecStart=/usr/bin/python3 randomsparkles.py
+
+[Install]
+WantedBy=multi-user.target
+EOF
 ```
 
-## Change the colour
+Enable the service:
 
-You can set the colour of all the LEDs together using RGB values (all 0-1):
-
-```python
-from tree import RGBXmasTree
-
-tree = RGBXmasTree()
-
-tree.color = (1, 0, 0)
+```bash
+sudo systemctl daemon-reload && \
+sudo systemctl enable --now rgbxmastree
 ```
 
-Alternatively you can use the `colorzero` library:
+## Editing the service
 
-```python
-from tree import RGBXmasTree
-from colorzero import Color
+If you wish to edit the service (to change the script for example):
 
-tree = RGBXmasTree()
-
-tree.color = Color('red')
+```bash
+sudo nano /etc/systemd/system/rgbxmastree.service
 ```
 
-You can write a loop to repeatedly cycle through red, green and blue:
+Make your modifications, then restart the service with:
 
-```python
-from tree import RGBXmasTree
-from time import sleep
-
-tree = RGBXmasTree()
-
-colors = [(1, 0, 0), (0, 1, 0), (0, 0, 1)]
-
-for color in colors:
-    tree.color = color
-    sleep(1)
+```bash
+sudo systemctl restart rgbxmastree.service
 ```
 
-## Individual control
-
-You can also control each LED individually, for example turn each one red, one
-at a time:
-
-```python
-from tree import RGBXmasTree
-from time import sleep
-
-tree = RGBXmasTree()
-
-for pixel in tree:
-    pixel.color = (1, 0, 0)
-    sleep(1)
-```
-
-To control a specific pixel, you can access it by its index number (0-24):
-
-```python
-tree[0].color = (0, 1, 0)
-```
-
-## Fast batch update of multiple pixels
-
-tree = RGBXmasTree(auto_update=False)
-tree[0] = (1,0,0)
-tree[1] = (1,1,0)
-tree[2] = (1,0,1)
-tree.update()
-
-## Change the brightness
-
-You can change the brightness from 0 to 1 - the default is 0.5. You can set this
-when initialising your tree:
-
-```python
-from tree import RGBXmasTree
-
-tree = RGBXmasTree(brightness=0.1)
-```
-
-Alternatively, you can change it after initialisation:
-
-```python
-from tree import RGBXmasTree
-
-tree = RGBXmasTree()
-
-tree.brightness = 0.1
-```
-
-You'll find that 1 is _extremely bright_ and even 0.1 is plenty bright enough if
-the tree is on your desk :)
-
-## Examples
-
-## RGB cycle
-
-Cycle through red, green and blue, changing all pixels together
-
-- [rgb.py](examples/rgb.py)
-
-### One-by-one
-
-Cycle through red, green and blue, changing pixel-by-pixel
-
-- [onebyone.py](examples/onebyone.py)
-
-### Hue cycle
-
-Cycle through hues forever
-
-- [huecycle.py](examples/huecycle.py)
-
-### Random sparkles
-
-Randomly sparkle all the pixels
-
-- [randomsparkles.py](examples/randomsparkles.py)
-
-### Flow
-
-Colors flow up the rows of pixels.
-
-Uses delayed update of RGBXmasTree for fast changes to all pixels
-
-- [flow.py](examples/flow.py)
