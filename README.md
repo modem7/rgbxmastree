@@ -7,7 +7,7 @@ Raspberry Pi RGB Xmas Tree
 curl -s https://raw.githubusercontent.com/modem7/rgbxmastree/master/install.sh | sudo bash
 ```
 
-## Getting started
+## Manual installation
 
 Install required packages:
 
