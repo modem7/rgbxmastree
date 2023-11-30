@@ -2,6 +2,8 @@
 
 Raspberry Pi RGB Xmas Tree
 
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/modem7)
+
 ## Automated install script
 ```bash
 curl -s https://raw.githubusercontent.com/modem7/rgbxmastree/master/install.sh | sudo bash
